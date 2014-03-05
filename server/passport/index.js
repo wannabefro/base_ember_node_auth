@@ -2,9 +2,8 @@
 
 var passport = require('passport');
 var User = require('../models/user');
-var strategies = [
-  require('./local')
-];
+var GithubStrategy = require('passport-github').Strategy;
+var configAuth = require('./auth');
 
 /**
  * Set up Passport and connect to the application. Passport will use the user
@@ -19,13 +18,46 @@ module.exports = function(app) {
   passport.deserializeUser(function(id, done) {
     User.findById(id, '-password').exec(done);
   });
+  passport.use(new GithubStrategy({
+    clientID: configAuth.githubAuth.clientID,
+    clientSecret: configAuth.githubAuth.clientSecret,
+    callbackURL: configAuth.githubAuth.callbackURL
+  },
+  function(token, refreshToken, profile, done) {
 
-  // Add any strategies required
-  strategies.forEach(function(strategy) {
-    passport.use(strategy);
-  });
+    // make the code asynchronous
+    // User.findOne won't fire until we have all our data back from Google
+    process.nextTick(function() {
 
-  // Connect middleware
-  app.use(passport.initialize());
-  app.use(passport.session());
+      // try to find the user based on their google id
+      User.findOne({ 'githubId' : profile.id }, function(err, user) {
+        if (err)
+          return done(err);
+
+        if (user) {
+          return done(null, user);
+        } else {
+          // if the user isnt in our database, create a new user
+          var newUser          = new User();
+
+          newUser.githubId    = profile.id;
+          newUser.githubToken = token;
+          newUser.username  = profile.displayName;
+          newUser.email = profile.emails[0].value; // pull the first email
+
+          // save the user
+          newUser.save(function(err) {
+            if (err)
+              throw err;
+            return done(null, newUser);
+          });
+        }
+      });
+    });
+  }
+                                 ));
+
+                                 // Connect middleware
+                                 app.use(passport.initialize());
+                                 app.use(passport.session());
 };

@@ -1,4 +1,6 @@
 'use strict';
+var dotenv = require('dotenv');
+dotenv.load();
 
 var express = require('express');
 var http = require('http');
@@ -13,6 +15,8 @@ exports.startServer = function(port, publicPath, callback) {
   var app = express();
   var server = http.createServer(app);
   var indexPath = path.join(publicPath, 'index.html');
+  app.set('view engine', 'jade');
+  app.set('views', __dirname + '/views');
 
   // Add middleware
   app.use(express.compress());
