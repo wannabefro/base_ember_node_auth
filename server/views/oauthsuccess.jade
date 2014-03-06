@@ -1,7 +1,0 @@
-html
-  head
-  body
-    script(type='text/javascript').
-      window.opener.App.ExternalConnector.trigger('externalAuthenticationSucceeded',{access_token: !{JSON.stringify(access_token)} })
-      window.close()
-
