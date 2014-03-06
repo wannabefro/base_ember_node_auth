@@ -15,7 +15,7 @@ module.exports = function(app) {
       if (err){
         return res.render('oauth');
       }
-      return res.render('oauth', {success: true, access_token: user.githubToken});
+      return res.render('oauth', {success: true, access_token: user.githubToken, user: user});
     })(req, res, next);
   });
 }

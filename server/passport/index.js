@@ -42,7 +42,7 @@ module.exports = function(app) {
 
           newUser.githubId    = profile.id;
           newUser.githubToken = token;
-          newUser.username  = profile.displayName;
+          newUser.username  = profile.username;
           newUser.email = profile.emails[0].value; // pull the first email
 
           // save the user

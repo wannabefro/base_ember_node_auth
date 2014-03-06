@@ -3,6 +3,9 @@ App.ExternalAuthenticator = Ember.SimpleAuth.Authenticators.Base.extend({
     var _this = this;
     return new Ember.RSVP.Promise(function(resolve, reject) {
       if (!Ember.isEmpty(properties.access_token)) {
+        var store = App.__container__.lookup('store:main');
+        var currentUser = store.push('user', JSON.parse(properties.user));
+        App.__container__.lookup('controller:currentUser').set('content', currentUser);
         resolve(properties);
       } else {
         reject();
@@ -12,7 +15,14 @@ App.ExternalAuthenticator = Ember.SimpleAuth.Authenticators.Base.extend({
   authenticate: function() {
     return new Ember.RSVP.Promise(function(resolve, reject) {
       App.ExternalConnector.one('externalAuthenticationSucceeded', function(properties) {
-        Ember.run(function() { resolve(properties); });
+        properties.user.id = properties.user.githubId
+        Ember.run(function() { 
+          var store = App.__container__.lookup('store:main');
+          var currentUser = store.push('user', properties.user);
+          App.__container__.lookup('controller:currentUser').set('content', currentUser);
+          properties.user = JSON.stringify(properties.user);
+          resolve(properties); 
+        });
       });
       App.ExternalConnector.one('externalAuthenticationFailed', function(error) {
         Ember.run(function() { reject(error); });
