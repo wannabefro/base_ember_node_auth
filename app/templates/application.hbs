@@ -1,1 +1,7 @@
-{{outlet}}
+<h1>Issue Tracker</h1>
+{{#if session.isAuthenticated}}
+  <a {{ action 'invalidateSession' }}>Logout</a>
+  {{outlet}}
+{{else}}
+  {{render 'login'}}
+{{/if}}

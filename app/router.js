@@ -3,5 +3,4 @@ App.Router.reopen({
 });
 
 App.Router.map(function() {
-  this.route('login');
 });

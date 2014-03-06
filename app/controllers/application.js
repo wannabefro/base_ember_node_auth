@@ -8,6 +8,12 @@ App.ApplicationRoute = Ember.Route.extend(Ember.SimpleAuth.ApplicationRouteMixin
       }, function(error) {
         _this.send('sessionAuthenticationFailed', error);
       });
+    },
+    invalidateSession: function(){
+      var _this = this;
+      this.get('session').invalidate().then(function(){
+        $.get('logout');
+      });
     }
   }
 });
