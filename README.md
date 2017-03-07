@@ -161,7 +161,7 @@ Generate/destroy a test file with the given test name for testing the site with 
 
 
 ### Testing
-Tests leverage [Mocha](http://visionmedia.github.io/mocha/), [Mocha as Promised](https://github.com/domenic/mocha-as-promised), and [Chai](http://chaijs.com/). Code and site testing is provided. Code testing adds [Sinon](http://sinonjs.org/) and [Sinon-Chai](https://github.com/domenic/sinon-chai). If you have not set up your environment for testing you must run the `test:install` task first.
+Tests leverage [Mocha](http://mochajs.org/), [Mocha as Promised](https://github.com/domenic/mocha-as-promised), and [Chai](http://chaijs.com/). Code and site testing is provided. Code testing adds [Sinon](http://sinonjs.org/) and [Sinon-Chai](https://github.com/domenic/sinon-chai). If you have not set up your environment for testing you must run the `test:install` task first.
 
 #### `test:install`
 Install packages required to run code and site testing. You should only need to run this once, unless the task `npm:clean` has been run or you are aware that testing packages have been updated.
